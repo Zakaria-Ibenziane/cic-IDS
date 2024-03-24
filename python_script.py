@@ -1,14 +1,14 @@
 import pandas as pd 
 import pickle
 
+# Load the pre-trained model
 with open('modele.pkl','rb') as fichier:
 	modele = pickle.load(fichier)
-	
-df_test = pd.read_csv(ens33.csv)
 
-df_test = df_test.drop_duplicates(keep="first")
-df_test = df_test.dropna(axis=0)
+# Load the test dataset
+df_test = pd.read_csv("ens33.csv")
 
+# Select a subset of columns from the dataset
 colonnes_selected = [	
 						'dst_port','flow_duration','tot_fwd_pkts','tot_bwd_pkts',
 						'totlen_fwd_pkts','totlen_bwd_pkts','fwd_pkt_len_max',
@@ -26,16 +26,21 @@ colonnes_selected = [
 						'ece_flag_cnt','down_up_ratio','pkt_size_avg',
 						'fwd_header_len','init_fwd_win_byts','init_bwd_win_byts',
 						'active_mean','active_std','active_max','active_min',
-						'idle_mean','idle_std','idle_max','idle_min',
+						'idle_mean','idle_std','idle_max','idle_min'
 
 							]
 
 
-
 df_test = df_test[colonnes_selected]
 
+# Perform data cleaning operations
+df_test = df_test.drop_duplicates(keep="first")
+df_test = df_test.dropna(axis=0)
+
+# Apply the pre-trained model to the cleaned test dataset
 prediction = modele.predict(df_test)
 
+# Print out the resulting predictions
 print(prediction)
 
 
